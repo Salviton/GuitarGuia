@@ -69,7 +69,7 @@ Esta es una web estática de un solo archivo HTML. No necesita instalación ni s
 ## Autor
 
 Guitarrista flamenco autodidacta con años de toque y muchas ganas de avanzar con orden.  
-Hecho con pasión por el arte flamenco y con la ayuda de [Claude](https://claude.ai).
+Hecho con pasión por el arte flamenco
 
 ---
 
