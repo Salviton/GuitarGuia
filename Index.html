@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duende — Guitarra Flamenca</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0d0a07;
+    --tierra: #1a1208;
+    --oro: #c8922a;
+    --oro-claro: #e8b84b;
+    --rojo: #8b1a1a;
+    --rojo-vivo: #c0392b;
+    --crema: #f5ede0;
+    --crema-oscuro: #d4c4a8;
+    --gris: #6b6055;
+    --blanco: #faf7f2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--negro);
+    color: var(--crema);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: linear-gradient(to bottom, rgba(13,10,7,0.98), transparent);
+    border-bottom: 1px solid rgba(200,146,42,0.15);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-style: italic; font-weight: 900;
+    color: var(--oro); letter-spacing: 0.05em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--crema-oscuro); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--oro); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 6rem 3rem 5rem;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 70% 40%, rgba(139,26,26,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(200,146,42,0.1) 0%, transparent 50%),
+      linear-gradient(160deg, #0d0a07 0%, #1a0f0a 50%, #0d0a07 100%);
+    overflow: hidden;
+  }
+  .hero-decoracion {
+    position: absolute; top: 0; right: 0; width: 50%; height: 100%;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent, transparent 2px,
+      rgba(200,146,42,0.03) 2px, rgba(200,146,42,0.03) 4px
+    );
+    pointer-events: none;
+  }
+  .hero-linea {
+    position: absolute; left: 3rem; top: 50%; transform: translateY(-50%);
+    width: 2px; height: 40vh;
+    background: linear-gradient(to bottom, transparent, var(--oro), transparent);
+    opacity: 0.4;
+  }
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--oro); margin-bottom: 1.5rem;
+    animation: fadeUp 1s 0.2s both;
+  }
+  .hero-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 900; font-style: italic;
+    line-height: 0.9; letter-spacing: -0.02em;
+    color: var(--blanco);
+    max-width: 800px;
+    animation: fadeUp 1s 0.4s both;
+  }
+  .hero-titulo span { color: var(--oro); display: block; }
+  .hero-sub {
+    margin-top: 2rem; max-width: 500px;
+    font-size: 1rem; line-height: 1.7;
+    color: var(--crema-oscuro);
+    animation: fadeUp 1s 0.6s both;
+  }
+  .hero-cta {
+    margin-top: 3rem; display: flex; gap: 1.5rem; align-items: center;
+    animation: fadeUp 1s 0.8s both;
+  }
+  .btn-primario {
+    display: inline-block; padding: 1rem 2.5rem;
+    background: var(--oro); color: var(--negro);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; font-weight: 700;
+    transition: all 0.3s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primario:hover { background: var(--oro-claro); transform: translateY(-2px); }
+  .hero-scroll {
+    font-family: 'Space Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gris); display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-scroll::before {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--gris);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECCIÓN GENÉRICA ── */
+  section { padding: 6rem 3rem; }
+  .seccion-header { margin-bottom: 4rem; }
+  .seccion-numero {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--oro); display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .seccion-numero::after { content: ''; flex: 0 0 60px; height: 1px; background: var(--oro); opacity: 0.4; }
+  .seccion-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900; line-height: 1.1;
+  }
+  .seccion-titulo em { font-style: italic; color: var(--oro); }
+
+  /* ── CURRÍCULUM ── */
+  #curriculo { background: var(--tierra); }
+  .niveles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 0;
+    border: 1px solid rgba(200,146,42,0.2);
+  }
+  .nivel-card {
+    padding: 2.5rem;
+    border-right: 1px solid rgba(200,146,42,0.2);
+    border-bottom: 1px solid rgba(200,146,42,0.2);
+    position: relative; overflow: hidden;
+    cursor: pointer;
+    transition: background 0.4s;
+  }
+  .nivel-card:hover { background: rgba(200,146,42,0.06); }
+  .nivel-card.activo { background: rgba(200,146,42,0.1); }
+  .nivel-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--oro); margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nivel-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--oro);
+  }
+  .nivel-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;
+  }
+  .nivel-duracion {
+    font-family: 'Space Mono', monospace; font-size: 0.65rem;
+    color: var(--gris); margin-bottom: 1.5rem;
+  }
+  .nivel-items { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .nivel-items li {
+    font-size: 0.85rem; color: var(--crema-oscuro);
+    padding-left: 1.2rem; position: relative; line-height: 1.5;
+  }
+  .nivel-items li::before {
+    content: '—'; position: absolute; left: 0; color: var(--rojo); font-size: 0.8rem;
+  }
+  .nivel-activo-badge {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    background: var(--rojo-vivo); color: white;
+    font-family: 'Space Mono', monospace; font-size: 0.55rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+  }
+
+  /* ── TÉCNICAS ── */
+  #tecnicas { background: var(--negro); }
+  .tecnicas-layout { display: grid; grid-template-columns: 200px 1fr; gap: 3rem; align-items: start; }
+  .tecnicas-menu { display: flex; flex-direction: column; gap: 0; border-left: 2px solid rgba(200,146,42,0.2); flex-shrink: 0; }
+  .tecnica-btn {
+    padding: 1rem 1rem;
+    background: none; border: none; cursor: pointer;
+    text-align: left; color: var(--gris);
+    font-family: 'Libre Baskerville', serif; font-size: 0.82rem;
+    border-bottom: 1px solid rgba(200,146,42,0.1);
+    transition: all 0.3s; position: relative;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tecnica-btn::before {
+    content: ''; position: absolute; left: -2px; top: 0; bottom: 0;
+    width: 2px; background: var(--oro);
+    transform: scaleY(0); transition: transform 0.3s;
+  }
+  .tecnica-btn:hover { color: var(--crema); background: rgba(200,146,42,0.05); }
+  .tecnica-btn.activa { color: var(--crema); background: rgba(200,146,42,0.08); }
+  .tecnica-btn.activa::before { transform: scaleY(1); }
+  .tecnica-contenido { min-height: 500px; overflow: hidden; min-width: 0; }
+  .tecnica-panel { display: none; }
+  .tecnica-panel.activo { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .tecnica-panel h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+  .tecnica-nivel-tag {
+    font-family: 'Space Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--oro); margin-bottom: 1.5rem; display: block;
+  }
+  .tecnica-desc { font-size: 0.95rem; line-height: 1.8; color: var(--crema-oscuro); margin-bottom: 2rem; }
+  .tecnica-pasos {
+    display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;
+  }
+  .paso {
+    display: flex; gap: 1.5rem; align-items: flex-start;
+    padding: 1.2rem;
+    border: 1px solid rgba(200,146,42,0.15);
+    background: rgba(200,146,42,0.03);
+  }
+  .paso-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900; color: rgba(200,146,42,0.3);
+    line-height: 1; flex-shrink: 0; width: 40px;
+  }
+  .paso-texto { font-size: 0.9rem; line-height: 1.6; color: var(--crema-oscuro); }
+  .paso-texto strong { color: var(--crema); }
+  .tecnica-video-placeholder {
+    background: rgba(200,146,42,0.05);
+    border: 1px dashed rgba(200,146,42,0.3);
+    padding: 2rem; text-align: center;
+    font-family: 'Space Mono', monospace; font-size: 0.7rem;
+    color: var(--gris); letter-spacing: 0.1em;
+  }
+
+  /* ── ACORDES ── */
+  #acordes { background: linear-gradient(160deg, #0f0c09 0%, #1a0f0a 100%); }
+  .acordes-intro { max-width: 600px; margin-bottom: 3rem; font-size: 0.95rem; line-height: 1.8; color: var(--crema-oscuro); }
+  .rueda-container { display: flex; flex-direction: column; gap: 3rem; }
+  .rueda-seccion h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-style: italic; margin-bottom: 1.5rem;
+    color: var(--oro-claro);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .rueda-seccion h3::after { content: ''; flex: 1; height: 1px; background: rgba(200,146,42,0.2); }
+  .acordes-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1rem;
+  }
+  .acorde-card {
+    background: rgba(200,146,42,0.05);
+    border: 1px solid rgba(200,146,42,0.2);
+    padding: 1.2rem 1rem; text-align: center;
+    cursor: pointer; transition: all 0.3s;
+    position: relative;
+  }
+  .acorde-card:hover { background: rgba(200,146,42,0.12); border-color: var(--oro); transform: translateY(-3px); }
+  .acorde-nombre {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem;
+  }
+  .acorde-tipo {
+    font-family: 'Space Mono', monospace; font-size: 0.55rem;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--gris);
+  }
+  /* Diagrama de acorde SVG visual */
+  .diagrama-acorde {
+    margin: 0.8rem auto 0;
+    width: 80px; height: 90px;
+    position: relative;
+  }
+  .diagrama-acorde svg { width: 100%; height: 100%; }
+
+  /* Modal acorde */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.abierto { display: flex; }
+  .modal-acorde {
+    background: var(--tierra);
+    border: 1px solid rgba(200,146,42,0.4);
+    padding: 3rem; max-width: 500px; width: 90%;
+    position: relative;
+    animation: modalIn 0.3s ease;
+  }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  .modal-cerrar {
+    position: absolute; top: 1rem; right: 1.5rem;
+    background: none; border: none; color: var(--gris);
+    font-size: 1.5rem; cursor: pointer;
+    transition: color 0.3s;
+  }
+  .modal-cerrar:hover { color: var(--crema); }
+  .modal-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 900; font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+  .modal-subtitulo {
+    font-family: 'Space Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--oro); margin-bottom: 2rem;
+  }
+  .modal-diagrama-grande {
+    display: flex; justify-content: center; margin-bottom: 2rem;
+  }
+  .modal-info { font-size: 0.9rem; line-height: 1.7; color: var(--crema-oscuro); }
+  .modal-dedos {
+    margin-top: 1.5rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(200,146,42,0.2);
+  }
+  .modal-dedos h4 {
+    font-family: 'Space Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--oro);
+    margin-bottom: 1rem;
+  }
+  .dedos-tabla { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  .dedos-tabla th, .dedos-tabla td {
+    padding: 0.5rem 0.8rem; text-align: left;
+    border-bottom: 1px solid rgba(200,146,42,0.1);
+    color: var(--crema-oscuro);
+  }
+  .dedos-tabla th { color: var(--gris); font-weight: 400; font-family: 'Space Mono', monospace; font-size: 0.6rem; }
+
+  /* ── VÍDEOS ── */
+  #videos { background: var(--tierra); }
+  .videos-filtros {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 3rem;
+  }
+  .filtro-btn {
+    padding: 0.5rem 1.2rem;
+    background: none;
+    border: 1px solid rgba(200,146,42,0.3);
+    color: var(--gris);
+    font-family: 'Space Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .filtro-btn:hover, .filtro-btn.activo {
+    background: var(--oro); color: var(--negro); border-color: var(--oro);
+  }
+  .videos-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;
+  }
+  .video-card {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(200,146,42,0.15);
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .video-card:hover { border-color: rgba(200,146,42,0.5); transform: translateY(-4px); }
+  .video-thumb {
+    aspect-ratio: 16/9;
+    position: relative; overflow: hidden;
+    background: var(--negro);
+  }
+  .video-thumb iframe { width: 100%; height: 100%; border: 0; }
+  .video-thumb-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #1a0f0a, #0d0a07);
+    font-size: 3rem;
+    color: rgba(200,146,42,0.3);
+  }
+  .video-info { padding: 1.2rem; }
+  .video-categoria {
+    font-family: 'Space Mono', monospace; font-size: 0.55rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--rojo-vivo); margin-bottom: 0.5rem;
+  }
+  .video-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.3;
+  }
+  .video-descripcion { font-size: 0.8rem; line-height: 1.6; color: var(--gris); }
+  .video-meta {
+    margin-top: 1rem; padding-top: 1rem;
+    border-top: 1px solid rgba(200,146,42,0.1);
+    display: flex; gap: 1rem;
+    font-family: 'Space Mono', monospace; font-size: 0.6rem;
+    color: var(--gris); text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  /* ── PLAN SEMANAL ── */
+  #plan { background: var(--negro); }
+  .plan-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
+  .dia-card {
+    background: rgba(200,146,42,0.04);
+    border: 1px solid rgba(200,146,42,0.15);
+    padding: 1.2rem 0.8rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .dia-card:hover { background: rgba(200,146,42,0.1); }
+  .dia-nombre {
+    font-family: 'Space Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--oro); margin-bottom: 1rem;
+  }
+  .dia-items { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .dia-items li { font-size: 0.75rem; color: var(--crema-oscuro); line-height: 1.4; }
+  .dia-tiempo {
+    margin-top: 1rem; padding-top: 1rem;
+    border-top: 1px solid rgba(200,146,42,0.1);
+    font-family: 'Space Mono', monospace; font-size: 0.6rem;
+    color: var(--gris);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--tierra);
+    border-top: 1px solid rgba(200,146,42,0.15);
+    padding: 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-style: italic; font-weight: 900;
+    color: var(--oro);
+  }
+  .footer-texto { font-size: 0.8rem; color: var(--gris); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .tecnicas-layout { grid-template-columns: 1fr; }
+    .plan-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; }
+  }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(20px); transition: all 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Duende</div>
+  <ul class="nav-links">
+    <li><a href="#curriculo">Currículum</a></li>
+    <li><a href="#tecnicas">Técnicas</a></li>
+    <li><a href="#acordes">Acordes</a></li>
+    <li><a href="#videos">Vídeos</a></li>
+    <li><a href="#plan">Plan semanal</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-decoracion"></div>
+  <div class="hero-linea"></div>
+  <div class="hero-tag">01 — Tu academia de guitarra flamenca</div>
+  <h1 class="hero-titulo">
+    El camino<br>
+    <span>del duende</span>
+  </h1>
+  <p class="hero-sub">Deja de dar palos de ciego. Aquí tienes un currículo ordenado, técnicas explicadas paso a paso, diagramas de acordes y vídeos seleccionados para que cada día sepas exactamente qué tocar.</p>
+  <div class="hero-cta">
+    <a href="#curriculo" class="btn-primario">Empieza tu camino</a>
+    <span class="hero-scroll">Nivel intermedio</span>
+  </div>
+</section>
+
+<!-- CURRÍCULUM -->
+<section id="curriculo">
+  <div class="seccion-header reveal">
+    <div class="seccion-numero">02 — Estructura de aprendizaje</div>
+    <h2 class="seccion-titulo">El <em>currículum</em> completo</h2>
+    <p style="margin-top:1rem; max-width:600px; color:var(--crema-oscuro); font-size:0.95rem; line-height:1.8;">
+      El camino del flamenco tiene etapas claras. Cada nivel construye sobre el anterior. No saltes adelante hasta que lo previo fluya sin pensar.
+    </p>
+  </div>
+  <div class="niveles-grid reveal">
+
+    <div class="nivel-card">
+      <div class="nivel-badge"><div class="nivel-dot"></div> Nivel 1</div>
+      <div class="nivel-titulo">Los cimientos</div>
+      <div class="nivel-duracion">2–4 meses · Principiante</div>
+      <ul class="nivel-items">
+        <li>Postura correcta del cuerpo y la guitarra</li>
+        <li>Rasgueo básico: p-i-m-a y variantes</li>
+        <li>La Cejilla y posiciones básicas</li>
+        <li>Compás de rumba (12 tiempos)</li>
+        <li>Acordes abiertos: Am, E, G, C, D</li>
+        <li>Picado lento con metrónomo</li>
+        <li>Golpe en tapa</li>
+      </ul>
+    </div>
+
+    <div class="nivel-card activo">
+      <div class="nivel-badge"><div class="nivel-dot"></div> Nivel 2</div>
+      <div class="nivel-titulo">El compás flamenco</div>
+      <div class="nivel-duracion">4–8 meses · Intermedio bajo</div>
+      <div class="nivel-activo-badge">★ Tu nivel</div>
+      <ul class="nivel-items">
+        <li>Compás de soleá (12 tiempos) con matices</li>
+        <li>Compás de bulerías y sus acentos</li>
+        <li>Rasgueo abanico completo</li>
+        <li>Primer trémolo (lento y controlado)</li>
+        <li>Falsetas sencillas por soleá</li>
+        <li>Acordes de Cejilla: por arriba y por medio</li>
+        <li>Ligados ascendentes y descendentes</li>
+      </ul>
+    </div>
+
+    <div class="nivel-card">
+      <div class="nivel-badge"><div class="nivel-dot"></div> Nivel 3</div>
+      <div class="nivel-titulo">Los palos esenciales</div>
+      <div class="nivel-duracion">6–12 meses · Intermedio</div>
+      <ul class="nivel-items">
+        <li>Soleá completa: llamada, falsetas, cierre</li>
+        <li>Siguiriyas: entender su compás asimétrico</li>
+        <li>Bulerías: velocidad y precisión</li>
+        <li>Alzapúa: técnica completa</li>
+        <li>Picado a tempo con escalas flamencas</li>
+        <li>Tangos y sus variantes</li>
+        <li>Acompañamiento al cante básico</li>
+      </ul>
+    </div>
+
+    <div class="nivel-card">
+      <div class="nivel-badge"><div class="nivel-dot"></div> Nivel 4</div>
+      <div class="nivel-titulo">Profundidad y velocidad</div>
+      <div class="nivel-duracion">12+ meses · Intermedio-alto</div>
+      <ul class="nivel-items">
+        <li>Trémolo fluido y musical</li>
+        <li>Farruca y su carácter masculino</li>
+        <li>Granaína y su compás libre</li>
+        <li>Falsetas propias: improvisación guiada</li>
+        <li>Acompañamiento al baile</li>
+        <li>Dinámicas: forte, piano, mezzoforte</li>
+        <li>Estudio de maestros: Paco, Tomatito, Moraíto</li>
+      </ul>
+    </div>
+
+    <div class="nivel-card">
+      <div class="nivel-badge"><div class="nivel-dot"></div> Nivel 5</div>
+      <div class="nivel-titulo">El arte propio</div>
+      <div class="nivel-duracion">Avanzado · Sin fin</div>
+      <ul class="nivel-items">
+        <li>Composición de falsetas originales</li>
+        <li>Palos complejos: tientos, caña, polo</li>
+        <li>Armonía flamenca avanzada</li>
+        <li>Modulaciones y cromatismos</li>
+        <li>Acompañamiento completo al cante</li>
+        <li>Actuación en vivo: gestión del duende</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- TÉCNICAS -->
+<section id="tecnicas">
+  <div class="seccion-header reveal">
+    <div class="seccion-numero">03 — Biblioteca técnica</div>
+    <h2 class="seccion-titulo">Las <em>técnicas</em> explicadas</h2>
+  </div>
+  <div class="tecnicas-layout reveal">
+    <nav class="tecnicas-menu">
+      <button class="tecnica-btn activa" onclick="mostrarTecnica('rasgueo')">Rasgueo</button>
+      <button class="tecnica-btn" onclick="mostrarTecnica('picado')">Picado</button>
+      <button class="tecnica-btn" onclick="mostrarTecnica('tremolo')">Trémolo</button>
+      <button class="tecnica-btn" onclick="mostrarTecnica('alzapua')">Alzapúa</button>
+      <button class="tecnica-btn" onclick="mostrarTecnica('golpe')">Golpe en tapa</button>
+      <button class="tecnica-btn" onclick="mostrarTecnica('ligados')">Ligados</button>
+      <button class="tecnica-btn" onclick="mostrarTecnica('abanico')">Abanico</button>
+    </nav>
+
+    <div class="tecnica-contenido">
+
+      <div id="panel-rasgueo" class="tecnica-panel activo">
+        <h3>El Rasgueo</h3>
+        <span class="tecnica-nivel-tag">Nivel 1–2 · Técnica fundamental</span>
+        <p class="tecnica-desc">El rasgueo es la técnica más característica del flamenco. Se ejecuta con los dedos de la mano derecha golpeando las cuerdas de forma sucesiva o simultánea, creando el sonido percusivo que define el compás flamenco.</p>
+        <div class="tecnica-pasos">
+          <div class="paso">
+            <div class="paso-num">1</div>
+            <div class="paso-texto"><strong>Posición inicial:</strong> Cierra la mano derecha ligeramente en puño. Los dedos anular (a), medio (m) e índice (i) deben estar curvados sobre las cuerdas. El pulgar (p) queda libre hacia abajo.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">2</div>
+            <div class="paso-texto"><strong>Rasgueo de cuatro dedos (a-m-i-p):</strong> Lanza primero el anular rozando las cuerdas hacia abajo, luego el medio, luego el índice, y por último un golpe hacia arriba del pulgar. Practica cada dedo por separado 5 minutos al día.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">3</div>
+            <div class="paso-texto"><strong>Velocidad gradual:</strong> Empieza a 40 BPM con metrónomo. Sube 5 BPM cada semana solo cuando los 4 dedos suenen limpios y con volumen uniforme. El error más común es saltar de velocidad demasiado pronto.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">4</div>
+            <div class="paso-texto"><strong>Rasgueo en compás:</strong> Aplícalo al compás de rumba: tiempos 1, 4, 7, 10 con rasgueo descendente; el 3 con golpe. Usa un acorde de Am con cejilla en 2.º traste.</div>
+          </div>
+        </div>
+        <div class="tecnica-video-placeholder">
+          🎬 Busca en YouTube: "Gerardo Núñez rasgueo flamenco técnica" · "Juan Martín rasgueo básico flamenco"
+        </div>
+      </div>
+
+      <div id="panel-picado" class="tecnica-panel">
+        <h3>El Picado</h3>
+        <span class="tecnica-nivel-tag">Nivel 2–3 · Melodía y velocidad</span>
+        <p class="tecnica-desc">El picado es la técnica de tocar notas individuales con los dedos índice (i) y medio (m) alternados. Es la base de las escalas flamencas y las falsetas melódicas. Requiere precisión, control y mucha paciencia.</p>
+        <div class="tecnica-pasos">
+          <div class="paso">
+            <div class="paso-num">1</div>
+            <div class="paso-texto"><strong>Apoyo tirando:</strong> En flamenco se usa el estilo <em>apoyando</em> (la yema del dedo descansa en la cuerda siguiente tras pulsar) para dar más volumen y definición. Comienza siempre así antes de pasar al tirando.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">2</div>
+            <div class="paso-texto"><strong>Escala de Mi menor:</strong> E F# G A B C D E en las cuerdas 1ª y 2ª. Alterna i-m estrictamente. 20 minutos diarios a 50 BPM. Este ejercicio es el más importante para desarrollar el picado.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">3</div>
+            <div class="paso-texto"><strong>Cromatismos de calentamiento:</strong> Traste 5-6-7-8 en cada cuerda, cuatro cuerdas seguidas, subiendo y bajando. Esto fortalece los dedos de la mano izquierda y mejora la precisión de la derecha.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">4</div>
+            <div class="paso-texto"><strong>Falseta de picado:</strong> Una vez dominas la escala a 80 BPM, aprende una falseta sencilla por soleá. Busca "falseta por soleá picado principiante" para encontrar material adaptado.</div>
+          </div>
+        </div>
+        <div class="tecnica-video-placeholder">
+          🎬 Busca en YouTube: "picado flamenco ejercicios" · "Rafael Riqueni técnica picado" · "Paco de Lucía picado lento"
+        </div>
+      </div>
+
+      <div id="panel-tremolo" class="tecnica-panel">
+        <h3>El Trémolo</h3>
+        <span class="tecnica-nivel-tag">Nivel 3–4 · La voz de la guitarra</span>
+        <p class="tecnica-desc">El trémolo es la técnica más evocadora del flamenco. La secuencia es p-a-m-i: el pulgar toca el bajo y los otros tres dedos repiten la nota melódica tan rápido que suena continuo. Es la técnica más exigente.</p>
+        <div class="tecnica-pasos">
+          <div class="paso">
+            <div class="paso-num">1</div>
+            <div class="paso-texto"><strong>Antes del trémolo:</strong> Debes dominar el picado a 100 BPM y tener buena independencia de dedos. Si no, practica primero picado durante 2–3 meses más.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">2</div>
+            <div class="paso-texto"><strong>La secuencia p-a-m-i:</strong> Practica solo la parte a-m-i (sin pulgar) en una cuerda al aire a 60 BPM. Cada dedo debe sonar igual de fuerte. Este ejercicio puede llevar meses hasta que sea uniforme.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">3</div>
+            <div class="paso-texto"><strong>Añade el pulgar (p):</strong> El pulgar toca en el tiempo 1, y a-m-i llenan los tres tiempos restantes del grupo de cuatro. Empieza con cuerda al aire en la melodía, bajo fijo en la 6ª cuerda.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">4</div>
+            <div class="paso-texto"><strong>Recuerda el Recuerdo:</strong> La pieza más clásica para aprender trémolo es "Recuerdos de la Alhambra" (aunque es clásica, no flamenca). Para flamenco, busca falsetas de trémolo por granaína o malagueña.</div>
+          </div>
+        </div>
+        <div class="tecnica-video-placeholder">
+          🎬 Busca en YouTube: "trémolo flamenco paso a paso" · "Vicente Amigo trémolo" · "trémolo guitarra flamenca lento"
+        </div>
+      </div>
+
+      <div id="panel-alzapua" class="tecnica-panel">
+        <h3>La Alzapúa</h3>
+        <span class="tecnica-nivel-tag">Nivel 3 · Técnica del pulgar</span>
+        <p class="tecnica-desc">La alzapúa es una técnica exclusiva del flamenco: el pulgar barre las cuerdas hacia abajo (golpe fuerte) y luego hacia arriba (alzapúa). Crea un efecto percusivo y melódico único, especialmente en bulerías y farrucas.</p>
+        <div class="tecnica-pasos">
+          <div class="paso">
+            <div class="paso-num">1</div>
+            <div class="paso-texto"><strong>Posición del pulgar:</strong> El pulgar debe estar rígido, usando la articulación de la muñeca más que la articulación del dedo. Apoya la mano en la tapa con el meñique como ancla suave.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">2</div>
+            <div class="paso-texto"><strong>Golpe hacia abajo:</strong> Golpea la cuerda 1ª con la uña del pulgar hacia abajo (tirando). Debe sonar fuerte y definido. Practica solo esto, alternado con silencio, a ritmo lento.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">3</div>
+            <div class="paso-texto"><strong>El alzapúa (hacia arriba):</strong> Inmediatamente después, el pulgar vuelve hacia arriba rozando la misma cuerda. El sonido es diferente: más suave y redondo. Golpe-alzapúa forma la unidad básica.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">4</div>
+            <div class="paso-texto"><strong>Patrón de tres:</strong> El patrón completo es: bajo (p hacia abajo en cuerda grave) + alzapúa doble (p hacia abajo y arriba en melodía). Esto forma el ritmo ternario característico.</div>
+          </div>
+        </div>
+        <div class="tecnica-video-placeholder">
+          🎬 Busca en YouTube: "alzapúa flamenco técnica" · "Ramón Montoya alzapúa" · "alzapúa ejercicios básicos"
+        </div>
+      </div>
+
+      <div id="panel-golpe" class="tecnica-panel">
+        <h3>Golpe en Tapa</h3>
+        <span class="tecnica-nivel-tag">Nivel 1–2 · Percusión y compás</span>
+        <p class="tecnica-desc">El golpe en tapa es el elemento más percusivo de la guitarra flamenca. Se ejecuta con el dedo anular (a) golpeando la tapa de la guitarra, marcando acentos rítmicos clave del compás flamenco.</p>
+        <div class="tecnica-pasos">
+          <div class="paso">
+            <div class="paso-num">1</div>
+            <div class="paso-texto"><strong>Zona de golpe:</strong> El golpe se da en la tapa entre el borde inferior del boca y el puente. Usa la yema carnosa del dedo anular, NO la uña. El sonido debe ser seco y resonante, no apagado.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">2</div>
+            <div class="paso-texto"><strong>Coordinación:</strong> El golpe se combina con el rasgueo. Practica: rasgueo hacia abajo + golpe simultáneo en los acentos 3, 6, 8, 10 del compás de soleá. Es lo que da el "peso" al compás.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">3</div>
+            <div class="paso-texto"><strong>Golpe en bulerías:</strong> En bulerías, el golpe cae en los tiempos 3, 6, 8, 10 y 12. Practicarlo sin la guitarra, solo palmando, te ayuda a interiorizar el compás antes de coordinar la mano.</div>
+          </div>
+        </div>
+        <div class="tecnica-video-placeholder">
+          🎬 Busca en YouTube: "golpe tapa guitarra flamenca" · "compás soleá guitarra" · "bulerías compás guitarra básico"
+        </div>
+      </div>
+
+      <div id="panel-ligados" class="tecnica-panel">
+        <h3>Ligados</h3>
+        <span class="tecnica-nivel-tag">Nivel 2 · Fluidez melódica</span>
+        <p class="tecnica-desc">Los ligados (hammer-on y pull-off) permiten tocar varias notas con una sola pulsación de la mano derecha. Son fundamentales para la fluidez de las falsetas flamencas y para el carácter expresivo del instrumento.</p>
+        <div class="tecnica-pasos">
+          <div class="paso">
+            <div class="paso-num">1</div>
+            <div class="paso-texto"><strong>Ligado ascendente (martillo):</strong> Pulsa la nota inicial con la mano derecha y "golpea" con fuerza el traste siguiente con un dedo de la izquierda. El golpe debe ser suficientemente fuerte para que la nota suene sin volver a pulsar.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">2</div>
+            <div class="paso-texto"><strong>Ligado descendente (tirón):</strong> Pulsa la nota superior y "tira" del dedo hacia abajo (hacia el suelo) para que la cuerda vibre y suene la nota inferior ya pisada. El tirón diagonal es la clave.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">3</div>
+            <div class="paso-texto"><strong>Cadenas de ligados:</strong> Practica secuencias de 3–4 ligados seguidos: Do-Re-Mi-Fa sin pulsar en medio. En flamenco se usan mucho en la escala frigia (la-sol-fa-mi) que es la base del sonido andaluz.</div>
+          </div>
+        </div>
+        <div class="tecnica-video-placeholder">
+          🎬 Busca en YouTube: "ligados guitarra flamenca ejercicios" · "hammer on pull off flamenco" · "escala frigia flamenca ligados"
+        </div>
+      </div>
+
+      <div id="panel-abanico" class="tecnica-panel">
+        <h3>Rasgueo Abanico</h3>
+        <span class="tecnica-nivel-tag">Nivel 2–3 · Rasgueo avanzado</span>
+        <p class="tecnica-desc">El abanico es un rasgueo continuo donde todos los dedos se despliegan uno tras otro hacia abajo, imitando el movimiento de abrir un abanico. Crea un sonido sostenido y brillante, muy usado en soleá y bulerías.</p>
+        <div class="tecnica-pasos">
+          <div class="paso">
+            <div class="paso-num">1</div>
+            <div class="paso-texto"><strong>Prerequisito:</strong> Domina primero el rasgueo básico a-m-i. El abanico añade el meñique (e o c) al inicio: e-a-m-i-p. Practica cada dedo aislado sobre una sola cuerda primero.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">2</div>
+            <div class="paso-texto"><strong>La secuencia completa:</strong> Meñique (e), anular (a), medio (m), índice (i), todos hacia abajo en rápida sucesión, terminando con el pulgar (p) hacia arriba. El efecto debe sonar como una nota larga, no como 5 golpes separados.</div>
+          </div>
+          <div class="paso">
+            <div class="paso-num">3</div>
+            <div class="paso-texto"><strong>Velocidad y control:</strong> La clave es que el primer dedo (meñique) anticipe el tiempo y los demás vengan inmediatamente detrás. A 60 BPM, hazlo tan rápido que los 5 dedos caigan dentro de un corchea.</div>
+          </div>
+        </div>
+        <div class="tecnica-video-placeholder">
+          🎬 Busca en YouTube: "rasgueo abanico flamenco" · "abanico soleá guitarra" · "flamenco strum technique abanico"
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ACORDES -->
+<section id="acordes">
+  <div class="seccion-header reveal">
+    <div class="seccion-numero">04 — Armería de acordes</div>
+    <h2 class="seccion-titulo">Los <em>acordes</em> del flamenco</h2>
+  </div>
+  <p class="acordes-intro reveal">El flamenco usa un sistema de acordes propio basado en la armonía andaluza. Haz clic en cualquier acorde para ver el diagrama completo y la digitación detallada.</p>
+
+  <div class="rueda-container reveal">
+
+    <div class="rueda-seccion">
+      <h3>Por Arriba (tonalidad de Mi)</h3>
+      <div class="acordes-grid">
+        <div class="acorde-card" onclick="abrirAcorde('E_phryg')">
+          <div class="acorde-nombre">E</div>
+          <div class="acorde-tipo">Frigio · Por arriba</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <!-- Trastes -->
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <!-- Cuerdas -->
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <!-- Puntos -->
+              <circle cx="22" cy="31" r="5" fill="#c8922a"/>
+              <circle cx="34" cy="31" r="5" fill="#c8922a"/>
+              <circle cx="46" cy="17" r="5" fill="#8b1a1a"/>
+              <circle cx="58" cy="17" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+        <div class="acorde-card" onclick="abrirAcorde('F_maj')">
+          <div class="acorde-nombre">F</div>
+          <div class="acorde-tipo">Mayor · Subdominante</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <!-- Cejilla -->
+              <rect x="10" y="12" width="60" height="6" rx="3" fill="#c8922a" opacity="0.8"/>
+              <circle cx="34" cy="31" r="5" fill="#c8922a"/>
+              <circle cx="46" cy="31" r="5" fill="#c8922a"/>
+              <circle cx="22" cy="38" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+        <div class="acorde-card" onclick="abrirAcorde('G_maj')">
+          <div class="acorde-nombre">G</div>
+          <div class="acorde-tipo">Mayor · Cadencia</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <circle cx="10" cy="45" r="5" fill="#c8922a"/>
+              <circle cx="58" cy="45" r="5" fill="#c8922a"/>
+              <circle cx="70" cy="31" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+        <div class="acorde-card" onclick="abrirAcorde('Am_open')">
+          <div class="acorde-nombre">Am</div>
+          <div class="acorde-tipo">Menor · Tónica</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <circle cx="34" cy="17" r="5" fill="#c8922a"/>
+              <circle cx="46" cy="17" r="5" fill="#c8922a"/>
+              <circle cx="22" cy="17" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+        <div class="acorde-card" onclick="abrirAcorde('Bdim')">
+          <div class="acorde-nombre">Bdim</div>
+          <div class="acorde-tipo">Disminuido · Tensión</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <circle cx="22" cy="17" r="5" fill="#c8922a"/>
+              <circle cx="58" cy="24" r="5" fill="#c8922a"/>
+              <circle cx="34" cy="24" r="5" fill="#8b1a1a"/>
+              <circle cx="46" cy="31" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rueda-seccion">
+      <h3>Por Medio (tonalidad de La)</h3>
+      <div class="acordes-grid">
+        <div class="acorde-card" onclick="abrirAcorde('A_phryg')">
+          <div class="acorde-nombre">A</div>
+          <div class="acorde-tipo">Frigio · Por medio</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <circle cx="34" cy="17" r="5" fill="#c8922a"/>
+              <circle cx="46" cy="17" r="5" fill="#c8922a"/>
+              <circle cx="58" cy="17" r="5" fill="#c8922a"/>
+            </svg>
+          </div>
+        </div>
+        <div class="acorde-card" onclick="abrirAcorde('Bb_maj')">
+          <div class="acorde-nombre">Bb</div>
+          <div class="acorde-tipo">Mayor · Cadencia andaluza</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <rect x="10" y="12" width="60" height="6" rx="3" fill="#c8922a" opacity="0.8"/>
+              <circle cx="22" cy="31" r="5" fill="#c8922a"/>
+              <circle cx="34" cy="24" r="5" fill="#8b1a1a"/>
+              <circle cx="46" cy="24" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+        <div class="acorde-card" onclick="abrirAcorde('G_port')">
+          <div class="acorde-nombre">G</div>
+          <div class="acorde-tipo">Mayor · Por medio</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <circle cx="22" cy="38" r="5" fill="#c8922a"/>
+              <circle cx="10" cy="38" r="5" fill="#8b1a1a"/>
+              <circle cx="58" cy="24" r="5" fill="#8b1a1a"/>
+              <circle cx="70" cy="24" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+        <div class="acorde-card" onclick="abrirAcorde('Dm_open')">
+          <div class="acorde-nombre">Dm</div>
+          <div class="acorde-tipo">Menor · Relativo</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <circle cx="58" cy="17" r="5" fill="#c8922a"/>
+              <circle cx="34" cy="24" r="5" fill="#c8922a"/>
+              <circle cx="46" cy="31" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+        <div class="acorde-card" onclick="abrirAcorde('E7')">
+          <div class="acorde-nombre">E7</div>
+          <div class="acorde-tipo">Séptima · Dominante</div>
+          <div class="diagrama-acorde">
+            <svg viewBox="0 0 80 90" fill="none">
+              <rect x="10" y="10" width="60" height="2" fill="#c8922a" opacity="0.6"/>
+              <rect x="10" y="24" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="38" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="52" width="60" height="1" fill="#6b6055"/>
+              <rect x="10" y="66" width="60" height="1" fill="#6b6055"/>
+              <line x1="10" y1="10" x2="10" y2="80" stroke="#6b6055" stroke-width="1.5"/>
+              <line x1="22" y1="10" x2="22" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="34" y1="10" x2="34" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="46" y1="10" x2="46" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="58" y1="10" x2="58" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <line x1="70" y1="10" x2="70" y2="80" stroke="#6b6055" stroke-width="1"/>
+              <circle cx="46" cy="17" r="5" fill="#c8922a"/>
+              <circle cx="22" cy="24" r="5" fill="#c8922a"/>
+              <circle cx="34" cy="24" r="5" fill="#8b1a1a"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rueda-seccion">
+      <h3>La Cadencia Andaluza</h3>
+      <div style="background: rgba(200,146,42,0.05); border: 1px solid rgba(200,146,42,0.2); padding: 2rem; margin-bottom: 1rem;">
+        <p style="font-size: 0.9rem; color: var(--crema-oscuro); line-height: 1.8; margin-bottom: 1.5rem;">La cadencia andaluza es la progresión más característica del flamenco. Se mueve por los acordes Am → G → F → E. Este movimiento descendente es la espina dorsal de la soleá, siguiriyas, tango y muchos otros palos.</p>
+        <div style="display: flex; align-items: center; gap: 0; flex-wrap: wrap;">
+          <div style="text-align:center; padding: 1rem 1.5rem; border: 1px solid rgba(200,146,42,0.3); background: rgba(200,146,42,0.08);">
+            <div style="font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900;">Am</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.55rem; color:var(--gris); margin-top:0.3rem;">TÓNICA</div>
+          </div>
+          <div style="padding: 0 0.5rem; color: var(--oro); font-size: 1.5rem;">→</div>
+          <div style="text-align:center; padding: 1rem 1.5rem; border: 1px solid rgba(200,146,42,0.2);">
+            <div style="font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900;">G</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.55rem; color:var(--gris); margin-top:0.3rem;">VII</div>
+          </div>
+          <div style="padding: 0 0.5rem; color: var(--oro); font-size: 1.5rem;">→</div>
+          <div style="text-align:center; padding: 1rem 1.5rem; border: 1px solid rgba(200,146,42,0.2);">
+            <div style="font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900;">F</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.55rem; color:var(--gris); margin-top:0.3rem;">VI</div>
+          </div>
+          <div style="padding: 0 0.5rem; color: var(--oro); font-size: 1.5rem;">→</div>
+          <div style="text-align:center; padding: 1rem 1.5rem; border: 1px solid var(--rojo); background: rgba(139,26,26,0.2);">
+            <div style="font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color: var(--oro);">E</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.55rem; color:var(--rojo-vivo); margin-top:0.3rem;">RESOLUCIÓN</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VÍDEOS -->
+<section id="videos">
+  <div class="seccion-header reveal">
+    <div class="seccion-numero">05 — Videoteca</div>
+    <h2 class="seccion-titulo">Aprende con los <em>maestros</em></h2>
+  </div>
+  <div class="videos-filtros reveal">
+    <button class="filtro-btn activo" onclick="filtrarVideos('todos', this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrarVideos('tecnica', this)">Técnica</button>
+    <button class="filtro-btn" onclick="filtrarVideos('palos', this)">Palos</button>
+    <button class="filtro-btn" onclick="filtrarVideos('maestros', this)">Maestros</button>
+    <button class="filtro-btn" onclick="filtrarVideos('teoria', this)">Teoría</button>
+  </div>
+  <div class="videos-grid reveal" id="videos-grid">
+
+    <a class="video-card" data-cat="tecnica" href="https://www.youtube.com/results?search_query=rasgueo+flamenco+guitarra+tecnica" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+      <div class="video-thumb">
+        <div class="video-thumb-placeholder">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">▶</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; color:var(--oro);">VER EN YOUTUBE</div>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-categoria">Técnica · Rasgueo</div>
+        <div class="video-titulo">Rasgueo flamenco: desde cero hasta velocidad</div>
+        <div class="video-descripcion">Aprende la técnica completa del rasgueo flamenco, desde la posición de la mano hasta los patrones más complejos.</div>
+        <div class="video-meta"><span>Principiante</span><span>Técnica mano derecha</span></div>
+      </div>
+    </a>
+
+    <a class="video-card" data-cat="palos" href="https://www.youtube.com/results?search_query=compas+solea+guitarra+flamenca" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+      <div class="video-thumb">
+        <div class="video-thumb-placeholder">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">▶</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; color:var(--oro);">VER EN YOUTUBE</div>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-categoria">Palos · Soleá</div>
+        <div class="video-titulo">El compás de soleá explicado paso a paso</div>
+        <div class="video-descripcion">Interioriza los 12 tiempos de la soleá y sus acentos característicos con este tutorial detallado.</div>
+        <div class="video-meta"><span>Intermedio</span><span>Compás y ritmo</span></div>
+      </div>
+    </a>
+
+    <a class="video-card" data-cat="maestros" href="https://www.youtube.com/results?search_query=Paco+de+Lucia+tecnica+guitarra+flamenca" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+      <div class="video-thumb">
+        <div class="video-thumb-placeholder">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">▶</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; color:var(--oro);">VER EN YOUTUBE</div>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-categoria">Maestros · Paco de Lucía</div>
+        <div class="video-titulo">Paco de Lucía: análisis de su técnica</div>
+        <div class="video-descripcion">Observa y analiza los elementos técnicos más importantes del maestro jerezano.</div>
+        <div class="video-meta"><span>Todos los niveles</span><span>Inspiración</span></div>
+      </div>
+    </a>
+
+    <a class="video-card" data-cat="teoria" href="https://www.youtube.com/results?search_query=cadencia+andaluza+armonia+flamenca+guitarra" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+      <div class="video-thumb">
+        <div class="video-thumb-placeholder">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">▶</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; color:var(--oro);">VER EN YOUTUBE</div>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-categoria">Teoría · Armonía</div>
+        <div class="video-titulo">La cadencia andaluza y la armonía flamenca</div>
+        <div class="video-descripcion">Entiende por qué suenan los acordes del flamenco: la escala frigia y la cadencia andaluza.</div>
+        <div class="video-meta"><span>Intermedio</span><span>Teoría musical</span></div>
+      </div>
+    </a>
+
+    <a class="video-card" data-cat="tecnica" href="https://www.youtube.com/results?search_query=picado+flamenco+ejercicios+guitarra" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+      <div class="video-thumb">
+        <div class="video-thumb-placeholder">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">▶</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; color:var(--oro);">VER EN YOUTUBE</div>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-categoria">Técnica · Picado</div>
+        <div class="video-titulo">Picado flamenco: ejercicios progresivos</div>
+        <div class="video-descripcion">Serie de ejercicios para desarrollar el picado desde 60 BPM hasta velocidades flamencas reales.</div>
+        <div class="video-meta"><span>Intermedio</span><span>Velocidad y precisión</span></div>
+      </div>
+    </a>
+
+    <a class="video-card" data-cat="palos" href="https://www.youtube.com/results?search_query=bulerias+compas+guitarra+flamenca" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+      <div class="video-thumb">
+        <div class="video-thumb-placeholder">
+          <div style="text-align:center;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">▶</div>
+            <div style="font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; color:var(--oro);">VER EN YOUTUBE</div>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-categoria">Palos · Bulerías</div>
+        <div class="video-titulo">Bulerías: el palo más festivo y exigente</div>
+        <div class="video-descripcion">Aprende los acentos característicos de la bulería y cómo aplicarlos en la guitarra.</div>
+        <div class="video-meta"><span>Intermedio-Alto</span><span>Velocidad y compás</span></div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- PLAN SEMANAL -->
+<section id="plan">
+  <div class="seccion-header reveal">
+    <div class="seccion-numero">06 — Rutina de estudio</div>
+    <h2 class="seccion-titulo">Tu <em>plan semanal</em></h2>
+    <p style="margin-top:1rem; max-width:600px; color:var(--crema-oscuro); font-size:0.95rem; line-height:1.8;">
+      45–60 minutos diarios estructurados valen más que 3 horas caóticas. Este plan para nivel intermedio te da dirección cada día.
+    </p>
+  </div>
+  <div class="plan-grid reveal">
+    <div class="dia-card">
+      <div class="dia-nombre">Lun</div>
+      <ul class="dia-items">
+        <li>Calentamiento cromatismos (10 min)</li>
+        <li>Rasgueo y compás soleá (20 min)</li>
+        <li>Falseta nueva, despacio (20 min)</li>
+      </ul>
+      <div class="dia-tiempo">50 min</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-nombre">Mar</div>
+      <ul class="dia-items">
+        <li>Picado: escalas y ejercicios (15 min)</li>
+        <li>Ligados y ornamentos (15 min)</li>
+        <li>Bulerías: compás y rasgueo (20 min)</li>
+      </ul>
+      <div class="dia-tiempo">50 min</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-nombre">Mié</div>
+      <ul class="dia-items">
+        <li>Trémolo lento y uniforme (20 min)</li>
+        <li>Revisión falseta anterior (20 min)</li>
+        <li>Escucha activa: maestros (10 min)</li>
+      </ul>
+      <div class="dia-tiempo">50 min</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-nombre">Jue</div>
+      <ul class="dia-items">
+        <li>Calentamiento libre (10 min)</li>
+        <li>Alzapúa básica (20 min)</li>
+        <li>Falseta nueva a tempo (20 min)</li>
+      </ul>
+      <div class="dia-tiempo">50 min</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-nombre">Vie</div>
+      <ul class="dia-items">
+        <li>Repaso general (15 min)</li>
+        <li>Abanico y rasgueo avanzado (20 min)</li>
+        <li>Acordes y cambios rápidos (15 min)</li>
+      </ul>
+      <div class="dia-tiempo">50 min</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-nombre">Sáb</div>
+      <ul class="dia-items">
+        <li>Sesión larga: tocar completo (30 min)</li>
+        <li>Grabarte y escucharte (15 min)</li>
+        <li>Nuevas falsetas o palos (15 min)</li>
+      </ul>
+      <div class="dia-tiempo">60 min</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-nombre">Dom</div>
+      <ul class="dia-items">
+        <li>Descanso o toque libre</li>
+        <li>Escucha discos de flamenco</li>
+        <li>Anota lo que quieres trabajar</li>
+      </ul>
+      <div class="dia-tiempo">Libre</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Duende</div>
+  <div class="footer-texto">Tu academia personal de guitarra flamenca · Hecha con pasión por el arte</div>
+</footer>
+
+<!-- MODAL ACORDE -->
+<div class="modal-overlay" id="modal-acorde" onclick="cerrarModal(event)">
+  <div class="modal-acorde">
+    <button class="modal-cerrar" onclick="document.getElementById('modal-acorde').classList.remove('abierto')">×</button>
+    <div class="modal-titulo" id="modal-titulo-texto">Am</div>
+    <div class="modal-subtitulo" id="modal-subtitulo-texto">Menor · Tónica flamenca</div>
+    <div class="modal-diagrama-grande" id="modal-diagrama"></div>
+    <div class="modal-info" id="modal-info-texto"></div>
+    <div class="modal-dedos">
+      <h4>Digitación</h4>
+      <table class="dedos-tabla" id="modal-dedos-tabla">
+        <thead><tr><th>Dedo</th><th>Cuerda</th><th>Traste</th></tr></thead>
+        <tbody id="modal-dedos-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TÉCNICAS ──
+function mostrarTecnica(id) {
+  document.querySelectorAll('.tecnica-panel').forEach(p => p.classList.remove('activo'));
+  document.querySelectorAll('.tecnica-btn').forEach(b => b.classList.remove('activa'));
+  document.getElementById('panel-' + id).classList.add('activo');
+  event.target.classList.add('activa');
+}
+
+// ── FILTRO VÍDEOS ──
+function filtrarVideos(cat, btn) {
+  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+  btn.classList.add('activo');
+  document.querySelectorAll('.video-card').forEach(card => {
+    if (cat === 'todos' || card.dataset.cat === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// ── DATOS DE ACORDES ──
+const acordesData = {
+  E_phryg: {
+    nombre: 'E',
+    subtitulo: 'Modo frigio · La resolución andaluza',
+    info: 'El acorde de E (Mi mayor) en el contexto flamenco actúa como el acorde de resolución de la cadencia andaluza. Tiene un carácter rotundo y masculino. Es el destino al que "resuelven" los acordes Am-G-F. En flamenco, este acorde por arriba es el corazón de la soleá, siguiriyas y muchos tangos.',
+    dedos: [['Índice (i)', '4ª-5ª', '1º'], ['Medio (m)', '3ª', '1º'], ['Anular (a)', '2ª', '2º']]
+  },
+  F_maj: {
+    nombre: 'F',
+    subtitulo: 'Mayor · La penúltima de la cadencia',
+    info: 'El Fa mayor es el acorde que precede a la resolución en Mi. Tiene una textura más suave y luminosa dentro de la cadencia andaluza. Se toca con cejilla en el primer traste. Su posición en la cadencia (Am-G-F-E) le da un carácter de anticipación y tensión dulce.',
+    dedos: [['Índice (i)', 'Cejilla', '1º'], ['Medio (m)', '3ª', '2º'], ['Anular (a)', '4ª', '3º'], ['Meñique (e)', '5ª', '3º']]
+  },
+  G_maj: {
+    nombre: 'G',
+    subtitulo: 'Mayor · El segundo peldaño',
+    info: 'Sol mayor es el segundo acorde de la cadencia andaluza. Tiene un carácter abierto y expansivo, especialmente en su forma abierta que usa las cuerdas al aire 3ª y 4ª. En la cadencia Am-G-F-E, el Sol actúa como una primera señal de movimiento hacia la resolución.',
+    dedos: [['Medio (m)', '5ª', '2º'], ['Anular (a)', '6ª', '3º'], ['Meñique (e)', '1ª', '3º']]
+  },
+  Am_open: {
+    nombre: 'Am',
+    subtitulo: 'Menor · La tónica flamenca por arriba',
+    info: 'La menor es el punto de partida de la cadencia andaluza y la tónica principal cuando se toca "por arriba". Tiene un carácter melancólico y profundo. Es el primer acorde que debe dominar cualquier guitarrista flamenco: limpio, resonante, con los dedos bien curvados.',
+    dedos: [['Índice (i)', '2ª', '1º'], ['Medio (m)', '4ª', '2º'], ['Anular (a)', '3ª', '2º']]
+  },
+  Bdim: {
+    nombre: 'Bdim',
+    subtitulo: 'Disminuido · El acorde de tensión',
+    info: 'El Si disminuido es el acorde más tenso y oscuro del flamenco. Se usa en momentos de alta expresividad, especialmente en siguiriyas y palos jondos. Su tensión armónica pide resolución hacia el acorde de tónica. Es inconfundible y debe usarse con criterio artístico.',
+    dedos: [['Índice (i)', '5ª', '1º'], ['Medio (m)', '3ª', '2º'], ['Anular (a)', '2ª', '3º'], ['Meñique (e)', '4ª', '4º']]
+  },
+  A_phryg: {
+    nombre: 'A',
+    subtitulo: 'Mayor · Por medio, la resolución',
+    info: 'El La mayor "por medio" es el equivalente del E por arriba: la resolución final de la cadencia cuando se toca en tonalidad de La. Se forma con tres dedos en el mismo traste. Tiene un sonido lleno y brillante que cierra con autoridad cualquier frase flamenca.',
+    dedos: [['Índice (i)', '2ª', '2º'], ['Medio (m)', '3ª', '2º'], ['Anular (a)', '4ª', '2º']]
+  },
+  Bb_maj: {
+    nombre: 'Bb',
+    subtitulo: 'Mayor · Penúltima de la cadencia por medio',
+    info: 'Sib mayor es el equivalente al Fa en la cadencia por medio (Dm-C-Bb-A). Requiere cejilla en el primer traste con el resto de dedos formando la posición. Es un acorde que cuesta más al principio pero que da mucho carácter al toque.',
+    dedos: [['Índice (i)', 'Cejilla', '1º'], ['Medio (m)', '4ª', '3º'], ['Anular (a)', '3ª', '3º'], ['Meñique (e)', '2ª', '3º']]
+  },
+  G_port: {
+    nombre: 'G',
+    subtitulo: 'Mayor · Por medio, posición cerrada',
+    info: 'El Sol mayor en posición por medio usa la cuerda grave pisada. Tiene más cuerpo que el Sol abierto y se integra mejor en el contexto de la cadencia por medio. Controlar el cambio fluido entre este acorde y el Sib es fundamental.',
+    dedos: [['Índice (i)', '6ª', '2º'], ['Medio (m)', '5ª', '2º'], ['Anular (a)', '1ª', '3º'], ['Meñique (e)', '2ª', '3º']]
+  },
+  Dm_open: {
+    nombre: 'Dm',
+    subtitulo: 'Menor · Tónica por medio',
+    info: 'Re menor es la tónica cuando se toca "por medio". Es un acorde muy flamenco, íntimo y oscuro. Su posición abierta permite que varias cuerdas resuenen libremente, dando un sonido lleno. La transición Dm-C-Bb-A es la cadencia andaluza por medio.',
+    dedos: [['Índice (i)', '1ª', '1º'], ['Medio (m)', '3ª', '2º'], ['Anular (a)', '2ª', '3º']]
+  },
+  E7: {
+    nombre: 'E7',
+    subtitulo: 'Séptima dominante · Tensión y expresión',
+    info: 'Mi séptima es una variante del Mi mayor que añade la séptima menor (Re) para dar más tensión y un sabor más "bluesy" y expresivo. Se usa mucho en flamenco para añadir color en los cierres y remates. Su sonido es inconfundiblemente flamenco.',
+    dedos: [['Índice (i)', '3ª', '1º'], ['Medio (m)', '5ª', '2º']]
+  }
+};
+
+function abrirAcorde(id) {
+  const data = acordesData[id];
+  if (!data) return;
+  document.getElementById('modal-titulo-texto').textContent = data.nombre;
+  document.getElementById('modal-subtitulo-texto').textContent = data.subtitulo;
+  document.getElementById('modal-info-texto').textContent = data.info;
+  const tbody = document.getElementById('modal-dedos-tbody');
+  tbody.innerHTML = data.dedos.map(d => `<tr><td>${d[0]}</td><td>${d[1]}</td><td>${d[2]}</td></tr>`).join('');
+  // Diagrama grande
+  document.getElementById('modal-diagrama').innerHTML = `
+    <svg viewBox="0 0 140 160" fill="none" width="140" height="160">
+      <rect x="20" y="20" width="100" height="3" fill="#c8922a" opacity="0.8"/>
+      <rect x="20" y="42" width="100" height="1.5" fill="#6b6055"/>
+      <rect x="20" y="64" width="100" height="1.5" fill="#6b6055"/>
+      <rect x="20" y="86" width="100" height="1.5" fill="#6b6055"/>
+      <rect x="20" y="108" width="100" height="1.5" fill="#6b6055"/>
+      <rect x="20" y="130" width="100" height="1.5" fill="#6b6055"/>
+      <line x1="20" y1="20" x2="20" y2="140" stroke="#6b6055" stroke-width="2"/>
+      <line x1="40" y1="20" x2="40" y2="140" stroke="#6b6055" stroke-width="1.5"/>
+      <line x1="60" y1="20" x2="60" y2="140" stroke="#6b6055" stroke-width="1.5"/>
+      <line x1="80" y1="20" x2="80" y2="140" stroke="#6b6055" stroke-width="1.5"/>
+      <line x1="100" y1="20" x2="100" y2="140" stroke="#6b6055" stroke-width="1.5"/>
+      <line x1="120" y1="20" x2="120" y2="140" stroke="#6b6055" stroke-width="1.5"/>
+      <text x="20" y="12" fill="#6b6055" font-size="7" font-family="monospace" text-anchor="middle">6ª</text>
+      <text x="40" y="12" fill="#6b6055" font-size="7" font-family="monospace" text-anchor="middle">5ª</text>
+      <text x="60" y="12" fill="#6b6055" font-size="7" font-family="monospace" text-anchor="middle">4ª</text>
+      <text x="80" y="12" fill="#6b6055" font-size="7" font-family="monospace" text-anchor="middle">3ª</text>
+      <text x="100" y="12" fill="#6b6055" font-size="7" font-family="monospace" text-anchor="middle">2ª</text>
+      <text x="120" y="12" fill="#6b6055" font-size="7" font-family="monospace" text-anchor="middle">1ª</text>
+      <text x="8" y="34" fill="#6b6055" font-size="8" font-family="monospace">I</text>
+      <text x="8" y="56" fill="#6b6055" font-size="8" font-family="monospace">II</text>
+      <text x="6" y="78" fill="#6b6055" font-size="8" font-family="monospace">III</text>
+      <text x="6" y="100" fill="#6b6055" font-size="8" font-family="monospace">IV</text>
+    </svg>
+  `;
+  document.getElementById('modal-acorde').classList.add('abierto');
+}
+
+function cerrarModal(e) {
+  if (e.target === document.getElementById('modal-acorde')) {
+    document.getElementById('modal-acorde').classList.remove('abierto');
+  }
+}
+
+// ── SCROLL REVEAL ──
+const observador = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observador.observe(el));
+</script>
+</body>
+</html>
